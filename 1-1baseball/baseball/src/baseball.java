@@ -9,7 +9,6 @@ public class baseball {
         int com[] = new int[3];
         String input;
         String[] human;
-        int flag = 0;
 
         int count = 1;
         int s = 0;
