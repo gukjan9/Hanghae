@@ -42,12 +42,16 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     }
 
     @Override
-    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) {
+    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException{
         log.info("로그인 성공");
         String username = ((UserDetailsImpl) authResult.getPrincipal()).getUsername();
         String token = jwtUtil.createToken(username);
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, token);
         log.info(token);
+        response.setContentType("text/plain");
+        response.setCharacterEncoding("UTF-8");
+        String message = "로그인 성공";
+        response.getWriter().write("상태코드 : " + response.getStatus() +", 메세지 : " + message);
     }
 
     @Override

@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-// 1 : N - User : Board
+// N : 1 - Board : User
 @Entity
 @Getter
 @Setter

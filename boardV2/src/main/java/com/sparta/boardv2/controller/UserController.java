@@ -42,8 +42,9 @@ public class UserController {
     }
 
     // https://velog.io/@jkijki12/Spirng-Security-Jwt-%EB%A1%9C%EA%B7%B8%EC%9D%B8-%EC%A0%81%EC%9A%A9%ED%95%98%EA%B8%B0
-    @PostMapping("/user/login")
-    public String login(@RequestBody @Valid SignupRequestDto requestDto) {
-        return jwtUtil.createToken(requestDto.getUsername());
-    }
+//    @PostMapping("/user/login")
+//    public String login(@RequestBody @Valid SignupRequestDto requestDto) {
+//        String token = jwtUtil.createToken(requestDto.getUsername());
+//        return jwtUtil.createToken(requestDto.getUsername());
+//    }
 }

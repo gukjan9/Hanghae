@@ -13,29 +13,27 @@ import lombok.Setter;
 @Table(name = "board")
 @Entity
 public class Board extends Timestamped {
+    // N : 1 - Board : User
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "username", nullable = false)
-    private String username;
     @Column(name = "title", nullable = false, length = 20)
     private String title;
     @Column(name = "contents", nullable = false, length = 500)
     private String contents;
-    @Column(name = "password", nullable = false)
-    private String password;
 
-    public Board(BoardRequestDto requestDto) {
-        this.username = requestDto.getUsername();
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    public Board(BoardRequestDto requestDto, User user) {
         this.title = requestDto.getTitle();
         this.contents = requestDto.getContents();
-        this.password = requestDto.getPassword();
+        this.user = user;
     }
 
     public void update(BoardRequestDto requestDto) {
-        this.username = requestDto.getUsername();
         this.title = requestDto.getTitle();
         this.contents = requestDto.getContents();
-        this.password = requestDto.getPassword();
     }
 }
