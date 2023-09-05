@@ -5,6 +5,7 @@ import com.sparta.boardv2.dto.BoardResponseDto;
 import com.sparta.boardv2.security.UserDetailsImpl;
 import com.sparta.boardv2.service.BoardService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,7 @@ public class BoardController {
     }
 
     @GetMapping("/boards")
-    public List<BoardResponseDto> getBoards() {
+    public List<BoardResponseDto> getBoards(){
         return boardService.getBoards();
     }
 
