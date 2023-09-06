@@ -2,6 +2,7 @@ package com.sparta.boardv2.service;
 
 import com.sparta.boardv2.dto.BoardRequestDto;
 import com.sparta.boardv2.dto.BoardResponseDto;
+import com.sparta.boardv2.dto.StatusDto;
 import com.sparta.boardv2.entity.Board;
 import com.sparta.boardv2.entity.User;
 import com.sparta.boardv2.repository.BoardRepository;
@@ -31,39 +32,39 @@ public class BoardService {
         return boardRepository.findAllByOrderByModifiedAtDesc().stream().map(BoardResponseDto::new).toList();
     }
 
-//    public List<BoardResponseDto> getBoardsByKeyword(String keyword) {
-//        return boardRepository.findAllByContentsContainsOrderByModifiedAtDesc(keyword).stream().map(BoardResponseDto::new).toList();
-//    }
+    public BoardResponseDto getBoardById(Long id){
+        Board board = boardRepository.findBoardById(id).orElseThrow(() ->
+                new RuntimeException("게시글이 존재하지 않습니다.")
+                );
+        return new BoardResponseDto(board);
+    }
 
-//    @Transactional
-//    public Long updateBoard(Long id, BoardRequestDto requestDto) {
-//        // 해당 메모가 DB에 존재하는지 확인
-//        Board board = findBoard(id);
-//
-//        if(requestDto.getPassword().equals(board.getPassword())){
-//            // memo 내용 수정
-//            board.update(requestDto);
-//            return id;
-//        }
-//        else{
-//            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
-//        }
-//    }
+    @Transactional
+    public BoardResponseDto updateBoard(Long id, BoardRequestDto requestDto, User user) {
+        Board board = findBoard(id);
 
-//    public Long deleteBoard(Long id, BoardRequestDto requestDto) {
-//        // 해당 메모가 DB에 존재하는지 확인
-//        Board board = findBoard(id);
-//
-//        if(requestDto.getPassword().equals(board.getPassword())){
-//            // memo 삭제
-//            boardRepository.delete(board);
-//            return id;
-//        }
-//        else{
-//            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
-//        }
-//
-//    }
+        if(board.getUser().getUsername().equals(user.getUsername())){
+            board.update(requestDto);
+            return new BoardResponseDto(board);
+        }
+        else{
+            throw new IllegalArgumentException("게시글 수정 권한이 없습니다.");
+        }
+    }
+
+    @Transactional
+    public StatusDto deleteBoard(Long id, User user) {
+        Board board = findBoard(id);
+
+        if(board.getUser().getUsername().equals(user.getUsername())){
+            boardRepository.delete(board);
+            return new StatusDto("삭제 성공", 200);
+        }
+        else{
+            return new StatusDto("삭제 실패", 400);
+        }
+
+    }
 
     private Board findBoard(Long id) {
         return boardRepository.findById(id).orElseThrow(() ->
