@@ -2,6 +2,7 @@ package com.sparta.boardv3.service;
 
 import com.sparta.boardv3.dto.SignupRequestDto;
 import com.sparta.boardv3.entity.User;
+import com.sparta.boardv3.entity.UserRoleEnum;
 import com.sparta.boardv3.jwt.JwtUtil;
 import com.sparta.boardv3.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -34,8 +35,17 @@ public class UserService {
             throw new IllegalArgumentException("중복된 사용자가 존재합니다.");
         }
 
+        // 사용자 ROLE 확인
+        UserRoleEnum role = UserRoleEnum.USER;
+        if (requestDto.isAdmin()) {
+            if (!ADMIN_TOKEN.equals(requestDto.getAdminToken())) {
+                throw new IllegalArgumentException("관리자 암호가 틀려 등록이 불가능합니다.");
+            }
+            role = UserRoleEnum.ADMIN;
+        }
+
         // 사용자 등록
-        User user = new User(username, password);
+        User user = new User(username, password, role);
         userRepository.save(user);
     }
 }

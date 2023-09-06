@@ -2,14 +2,18 @@ package com.sparta.boardv3.controller;
 
 import com.sparta.boardv3.dto.SignupRequestDto;
 import com.sparta.boardv3.dto.StatusDto;
+import com.sparta.boardv3.dto.UserInfoDto;
 import com.sparta.boardv3.entity.User;
+import com.sparta.boardv3.entity.UserRoleEnum;
 import com.sparta.boardv3.jwt.JwtUtil;
+import com.sparta.boardv3.security.UserDetailsImpl;
 import com.sparta.boardv3.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -39,6 +43,16 @@ public class UserController {
         }
         userService.signup(requestDto);
         return new StatusDto("저장 성공", 200);
+    }
+
+    @GetMapping("/user-info")
+    @ResponseBody
+    public UserInfoDto getUserInfo(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        String username = userDetails.getUser().getUsername();
+        UserRoleEnum role = userDetails.getUser().getRole();
+        boolean isAdmin = (role == UserRoleEnum.ADMIN);
+
+        return new UserInfoDto(username, isAdmin);
     }
 
     // https://velog.io/@jkijki12/Spirng-Security-Jwt-%EB%A1%9C%EA%B7%B8%EC%9D%B8-%EC%A0%81%EC%9A%A9%ED%95%98%EA%B8%B0
