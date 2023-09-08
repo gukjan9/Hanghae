@@ -63,7 +63,6 @@ public class BoardService {
         else{
             return new StatusDto("삭제 실패", 400);
         }
-
     }
 
     private Board findBoard(Long id) {

@@ -1,6 +1,7 @@
 package com.sparta.boardv3.entity;
 
 import com.sparta.boardv3.dto.BoardRequestDto;
+import com.sparta.boardv3.dto.CommentRequestDto;
 import com.sparta.boardv3.entity.Timestamped;
 import jakarta.persistence.*;
 import lombok.Getter;

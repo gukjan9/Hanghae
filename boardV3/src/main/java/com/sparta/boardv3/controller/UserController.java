@@ -42,7 +42,12 @@ public class UserController {
             }
         }
         userService.signup(requestDto);
-        return new StatusDto("저장 성공", 200);
+        if(requestDto.isAdmin()){
+            return new StatusDto("Admin 회원 가입 성공", 200);
+        }
+        else{
+            return new StatusDto("일반 회원 가입 성공", 200);
+        }
     }
 
     @GetMapping("/user-info")
