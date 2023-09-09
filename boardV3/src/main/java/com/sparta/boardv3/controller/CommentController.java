@@ -16,13 +16,13 @@ public class CommentController {
 
     // 댓글 생성
     @PostMapping("/comments/{id}")
-    public StatusDto createComment(@PathVariable Long id, @RequestBody CommentRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public CommentResponseDto createComment(@PathVariable Long id, @RequestBody CommentRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return commentService.createComment(id, requestDto, userDetails.getUser());
     }
 
     // 댓글 수정
     @PutMapping("/comments/{id}")
-    public StatusDto updateBoard(@PathVariable Long id, @RequestBody CommentRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public CommentResponseDto updateBoard(@PathVariable Long id, @RequestBody CommentRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return commentService.updateComment(id, requestDto, userDetails.getUser());
     }
 

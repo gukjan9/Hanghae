@@ -18,24 +18,24 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final BoardRepository boardRepository;
 
-    public StatusDto createComment(Long id, CommentRequestDto requestDto, User user) {
+    public CommentResponseDto createComment(Long id, CommentRequestDto requestDto, User user) {
         log.info("comment 등록 시도");
         Board board = boardRepository.findBoardById(id).orElseThrow(() ->
                 new NullPointerException("해당 글을 찾을 수 없습니다.")
         );
         log.info("Board는 찾음");
-        commentRepository.save(new Comment(requestDto, user, board));
+        Comment comment = commentRepository.save(new Comment(requestDto, user, board));
         log.info("Comment 등록함");
-        return new StatusDto("댓글 달기 성공", 200);
+        return new CommentResponseDto(comment);
     }
 
     @Transactional
-    public StatusDto updateComment(Long id, CommentRequestDto requestDto, User user) {
+    public CommentResponseDto updateComment(Long id, CommentRequestDto requestDto, User user) {
         Comment comment = findComment(id);
 
         if(comment.getUser().getUsername().equals(user.getUsername())){
             comment.update(requestDto);
-            return new StatusDto("댓글 수정 성공", 200);
+            return new CommentResponseDto(comment);
         }
         else{
             throw new IllegalArgumentException("댓글 수정 권한이 없습니다.");
