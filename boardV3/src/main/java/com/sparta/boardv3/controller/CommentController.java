@@ -25,4 +25,10 @@ public class CommentController {
     public StatusDto updateBoard(@PathVariable Long id, @RequestBody CommentRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return commentService.updateComment(id, requestDto, userDetails.getUser());
     }
+
+    // 댓글 삭제
+    @DeleteMapping("/comments/{id}")
+    public StatusDto deleteBoard(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return commentService.deleteBoard(id, userDetails.getUser());
+    }
 }

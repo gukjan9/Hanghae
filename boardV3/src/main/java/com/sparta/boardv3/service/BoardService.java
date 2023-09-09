@@ -61,7 +61,7 @@ public class BoardService {
             return new StatusDto("삭제 성공", 200);
         }
         else{
-            return new StatusDto("삭제 실패", 400);
+            return new StatusDto("게시글 삭제 권한이 없습니다.", 400);
         }
     }
 

@@ -39,7 +39,7 @@ public class BoardController {
     }
 
     // 게시글 수정
-    @PutMapping("/boards/{id}")
+    @PutMapping("/boards/{id}/")
     public BoardResponseDto updateBoard(@PathVariable Long id, @RequestBody BoardRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return boardService.updateBoard(id, requestDto, userDetails.getUser());
     }

@@ -31,16 +31,32 @@ public class CommentService {
 
     @Transactional
     public StatusDto updateComment(Long id, CommentRequestDto requestDto, User user) {
-        Comment comment = commentRepository.findCommentById(id).orElseThrow(() ->
-                new NullPointerException("해당 댓글을 찾을 수 없습니다.")
-        );
+        Comment comment = findComment(id);
 
         if(comment.getUser().getUsername().equals(user.getUsername())){
             comment.update(requestDto);
             return new StatusDto("댓글 수정 성공", 200);
         }
         else{
-            throw new IllegalArgumentException("게시글 수정 권한이 없습니다.");
+            throw new IllegalArgumentException("댓글 수정 권한이 없습니다.");
         }
+    }
+
+    public StatusDto deleteBoard(Long id, User user) {
+        Comment comment = findComment(id);
+
+        if(comment.getUser().getUsername().equals(user.getUsername())){
+            commentRepository.delete(comment);
+            return new StatusDto("삭제 성공", 200);
+        }
+        else{
+            return new StatusDto("댓글 삭제 권한이 없습니다", 400);
+        }
+    }
+
+    private Comment findComment(Long id) {
+        return commentRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("해당 댓글을 찾을 수 없습니다.")
+        );
     }
 }
