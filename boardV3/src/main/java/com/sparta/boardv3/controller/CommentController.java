@@ -1,9 +1,6 @@
 package com.sparta.boardv3.controller;
 
-import com.sparta.boardv3.dto.BoardRequestDto;
-import com.sparta.boardv3.dto.CommentRequestDto;
-import com.sparta.boardv3.dto.CommentResponseDto;
-import com.sparta.boardv3.dto.StatusDto;
+import com.sparta.boardv3.dto.*;
 import com.sparta.boardv3.entity.Comment;
 import com.sparta.boardv3.security.UserDetailsImpl;
 import com.sparta.boardv3.service.CommentService;
@@ -21,5 +18,11 @@ public class CommentController {
     @PostMapping("/comments/{id}")
     public StatusDto createComment(@PathVariable Long id, @RequestBody CommentRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return commentService.createComment(id, requestDto, userDetails.getUser());
+    }
+
+    // 댓글 수정
+    @PutMapping("/comments/{id}")
+    public StatusDto updateBoard(@PathVariable Long id, @RequestBody CommentRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return commentService.updateComment(id, requestDto, userDetails.getUser());
     }
 }

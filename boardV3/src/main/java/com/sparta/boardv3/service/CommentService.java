@@ -1,7 +1,6 @@
 package com.sparta.boardv3.service;
 
-import com.sparta.boardv3.dto.CommentRequestDto;
-import com.sparta.boardv3.dto.StatusDto;
+import com.sparta.boardv3.dto.*;
 import com.sparta.boardv3.entity.Board;
 import com.sparta.boardv3.entity.Comment;
 import com.sparta.boardv3.entity.User;
@@ -10,6 +9,7 @@ import com.sparta.boardv3.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -27,5 +27,20 @@ public class CommentService {
         commentRepository.save(new Comment(requestDto, user, board));
         log.info("Comment 등록함");
         return new StatusDto("댓글 달기 성공", 200);
+    }
+
+    @Transactional
+    public StatusDto updateComment(Long id, CommentRequestDto requestDto, User user) {
+        Comment comment = commentRepository.findCommentById(id).orElseThrow(() ->
+                new NullPointerException("해당 댓글을 찾을 수 없습니다.")
+        );
+
+        if(comment.getUser().getUsername().equals(user.getUsername())){
+            comment.update(requestDto);
+            return new StatusDto("댓글 수정 성공", 200);
+        }
+        else{
+            throw new IllegalArgumentException("게시글 수정 권한이 없습니다.");
+        }
     }
 }
