@@ -19,13 +19,10 @@ public class CommentService {
     private final BoardRepository boardRepository;
 
     public CommentResponseDto createComment(Long id, CommentRequestDto requestDto, User user) {
-        log.info("comment 등록 시도");
         Board board = boardRepository.findBoardById(id).orElseThrow(() ->
                 new NullPointerException("해당 글을 찾을 수 없습니다.")
         );
-        log.info("Board는 찾음");
         Comment comment = commentRepository.save(new Comment(requestDto, user, board));
-        log.info("Comment 등록함");
         return new CommentResponseDto(comment);
     }
 

@@ -1,6 +1,7 @@
 package com.sparta.boardv3.service;
 
 import com.sparta.boardv3.dto.SignupRequestDto;
+import com.sparta.boardv3.dto.StatusDto;
 import com.sparta.boardv3.entity.User;
 import com.sparta.boardv3.entity.UserRoleEnum;
 import com.sparta.boardv3.jwt.JwtUtil;
