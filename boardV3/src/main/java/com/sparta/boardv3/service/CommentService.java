@@ -4,6 +4,7 @@ import com.sparta.boardv3.dto.*;
 import com.sparta.boardv3.entity.Board;
 import com.sparta.boardv3.entity.Comment;
 import com.sparta.boardv3.entity.User;
+import com.sparta.boardv3.entity.UserRoleEnum;
 import com.sparta.boardv3.repository.BoardRepository;
 import com.sparta.boardv3.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +31,7 @@ public class CommentService {
     public CommentResponseDto updateComment(Long id, CommentRequestDto requestDto, User user) {
         Comment comment = findComment(id);
 
-        if(comment.getUser().getUsername().equals(user.getUsername())){
+        if(user.getRole().equals(UserRoleEnum.ADMIN) || comment.getUser().getUsername().equals(user.getUsername())){
             comment.update(requestDto);
             return new CommentResponseDto(comment);
         }
@@ -42,7 +43,7 @@ public class CommentService {
     public StatusDto deleteBoard(Long id, User user) {
         Comment comment = findComment(id);
 
-        if(comment.getUser().getUsername().equals(user.getUsername())){
+        if(user.getRole().equals(UserRoleEnum.ADMIN) || comment.getUser().getUsername().equals(user.getUsername())){
             commentRepository.delete(comment);
             return new StatusDto("삭제 성공", 200);
         }

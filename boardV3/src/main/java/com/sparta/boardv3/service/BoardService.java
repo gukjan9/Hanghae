@@ -5,6 +5,7 @@ import com.sparta.boardv3.dto.BoardResponseDto;
 import com.sparta.boardv3.dto.StatusDto;
 import com.sparta.boardv3.entity.Board;
 import com.sparta.boardv3.entity.User;
+import com.sparta.boardv3.entity.UserRoleEnum;
 import com.sparta.boardv3.repository.BoardRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -43,7 +44,7 @@ public class BoardService {
     public BoardResponseDto updateBoard(Long id, BoardRequestDto requestDto, User user) {
         Board board = findBoard(id);
 
-        if(board.getUser().getUsername().equals(user.getUsername())){
+        if(user.getRole().equals(UserRoleEnum.ADMIN) || board.getUser().getUsername().equals(user.getUsername())){
             board.update(requestDto);
             return new BoardResponseDto(board);
         }
@@ -56,7 +57,7 @@ public class BoardService {
     public StatusDto deleteBoard(Long id, User user) {
         Board board = findBoard(id);
 
-        if(board.getUser().getUsername().equals(user.getUsername())){
+        if(user.getRole().equals(UserRoleEnum.ADMIN) || board.getUser().getUsername().equals(user.getUsername())){
             boardRepository.delete(board);
             return new StatusDto("삭제 성공", 200);
         }
